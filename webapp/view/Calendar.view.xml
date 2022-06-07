@@ -1,7 +1,40 @@
-<mvc:View controllerName="sapui5calendar.controller.Calendar"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-    xmlns="sap.m">
-    <Page id="page" title="{i18n>title}">
-        <content />
-    </Page>
+<mvc:View
+	controllerName="sapui5calendar.controller.Calendar"
+	xmlns:mvc="sap.ui.core.mvc"
+	displayBlock="true"
+	xmlns="sap.m"
+>
+	<Panel
+		id="_IDGenPanel1"
+		headerText="{i18n>helloPanelTitle}"
+		class="sapUiResponsiveMargin"
+		width="auto"
+	>
+		<content>
+			<Button
+				id="helloDialogButton"
+                icon="sap-icon://world"
+				text="{i18n>openDialogButtonText}"
+				press=".onOpenDialog"
+				class="sapUiSmallMarginEnd"
+			/>
+			<Button
+				id="_IDGenButton1"
+				text="{i18n>showHelloButtonText}"
+				press=".onShowWorld"
+				class="sapUiSmallMarginEnd"
+			/>
+			<Input
+				id="_IDGenInput1"
+				value="{/recipient/name}"
+				valueLiveUpdate="true"
+				width="60%"
+			/>
+			<Text
+				id="_IDGenText1"
+				text="Hello {/recipient/name}"
+				class="sapUiTinyMargin"
+			/>
+		</content>
+	</Panel>
 </mvc:View>

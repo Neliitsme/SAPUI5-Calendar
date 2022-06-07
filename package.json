@@ -12,7 +12,8 @@
   "devDependencies": {
     "@sap/ux-ui5-tooling": "1",
     "@ui5/cli": "^2.14.1",
-    "cz-conventional-changelog": "^3.3.0"
+    "cz-conventional-changelog": "^3.3.0",
+    "prettier": "2.6.2"
   },
   "scripts": {
     "start": "fiori run --open \"test/flpSandbox.html?sap-ui-xx-viewCache=false#sapui5calendar-display\"",

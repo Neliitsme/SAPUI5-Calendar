@@ -20,21 +20,10 @@
         data-sap-ui-compatVersion="edge"
         data-sap-ui-async="true"
         data-sap-ui-frameOptions="trusted"
-		data-sap-ui-libs="sap.m"
-		data-sap-ui-onInit="module:index">
+		data-sap-ui-onInit="module:sap/ui/core/ComponentSupport">
     </script>
-    <script id="locate-reuse-libs" src="./utils/locate-reuse-libs.js"
-        data-sap-ui-manifest-uri="./manifest.json"
-        data-sap-ui-componentName="sapui5calendar">
-    </script> 
 </head>
 <body class="sapUiBody sapUiSizeCompact" id="content">
-    <div
-        data-sap-ui-component
-        data-name="sapui5calendar"
-        data-id="container"
-        data-settings='{"id" : "sapui5calendar"}'
-        data-handle-validation="true"
-    ></div>
+    <div data-sap-ui-component data-name="sapui5calendar" data-id="container" data-settings='{"id": "sapui5calendar"}'></div>
 </body>
 </html>

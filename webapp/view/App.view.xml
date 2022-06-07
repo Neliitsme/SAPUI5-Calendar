@@ -1,7 +1,19 @@
-<mvc:View controllerName="sapui5calendar.controller.App"
-    xmlns:html="http://www.w3.org/1999/xhtml"
-    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
-    xmlns="sap.m">
-    <App id="app">
-    </App>
+<mvc:View
+	controllerName="sapui5calendar.controller.App"
+	xmlns:mvc="sap.ui.core.mvc"
+	displayBlock="true"
+	xmlns="sap.m"
+>
+	<App id="_IDGenApp1">
+		<pages>
+			<Page
+				id="_IDGenPage1"
+				title="{i18n>homePageTitle}"
+			>
+				<content>
+					<mvc:XMLView id="_IDGenXMLView1" viewName="sapui5calendar.view.Calendar"/>
+				</content>
+			</Page>
+		</pages>
+	</App>
 </mvc:View>

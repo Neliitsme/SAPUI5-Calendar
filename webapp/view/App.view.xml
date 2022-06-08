@@ -4,16 +4,44 @@
 	displayBlock="true"
 	xmlns="sap.m"
 >
-	<App id="_IDGenApp1">
-		<pages>
-			<Page
-				id="_IDGenPage1"
-				title="{i18n>homePageTitle}"
-			>
-				<content>
-					<mvc:XMLView id="_IDGenXMLView1" viewName="sapui5calendar.view.Calendar"/>
-				</content>
-			</Page>
-		</pages>
-	</App>
+	<Shell
+		id="_IDGenShell1"
+		appWidthLimited="true"
+		backgroundColor=""
+		backgroundImage=""
+		backgroundOpacity="1"
+		backgroundRepeat="false"
+		headerRightText=""
+		homeIcon=""
+		logo=""
+		showLogout="true"
+		title=""
+		titleLevel="H1"
+	>
+		<App id="_IDGenApp1">
+			<pages>
+				<Page
+					id="_IDGenPage1"
+					title="{i18n>homePageTitle}"
+				>
+					<headerContent>
+						<Switch id="themeSwitch"
+							customTextOff="️🌑"
+							customTextOn="☀️"
+							state="true"
+							tooltip="Theme switch"
+							change="handleThemeSwitch"
+						>
+						</Switch>
+					</headerContent>
+					<content>
+						<mvc:XMLView
+							id="_IDGenXMLView1"
+							viewName="sapui5calendar.view.Calendar"
+						/>
+					</content>
+				</Page>
+			</pages>
+		</App>
+	</Shell>
 </mvc:View>

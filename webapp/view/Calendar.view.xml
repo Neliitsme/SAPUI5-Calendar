@@ -24,7 +24,8 @@
 					select="handleCalendarSelect"
 					intervalSelection="true"
 					weekNumberSelect="handleWeekNumberSelect"
-					width="30%"
+					width="auto"
+					showCurrentDateButton="true"
 				/>
 				<l:HorizontalLayout id="_IDGenHorizontalLayout2">
 					<Label

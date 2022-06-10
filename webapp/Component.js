@@ -4,8 +4,9 @@ sap.ui.define(
     'sap/ui/Device',
     'sapui5calendar/model/models',
     'sap/ui/model/json/JSONModel',
+    'sap/ui/model/xml/XMLModel',
   ],
-  function (UIComponent, Device, models, JSONModel) {
+  function (UIComponent, Device, models) {
     'use strict';
 
     return UIComponent.extend('sapui5calendar.Component', {
@@ -22,13 +23,6 @@ sap.ui.define(
       init: function () {
         // call the base component's init function
         UIComponent.prototype.init.apply(this, arguments);
-        var oData = {
-          recipient: {
-            name: 'World',
-          },
-        };
-        var oModel = new JSONModel(oData);
-        this.setModel(oModel);
 
         // enable routing
         this.getRouter().initialize();

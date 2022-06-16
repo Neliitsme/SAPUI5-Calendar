@@ -80,7 +80,7 @@
       },
       "calendarSpecialDates": {
         "type": "sap.ui.model.xml.XMLModel",
-        "uri": "/localService/mockdata/calendar.xml"
+        "uri": "/localService/mockdata/calendar.en.xml"
       }
     },
     "resources": {

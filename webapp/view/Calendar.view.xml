@@ -13,10 +13,7 @@
 		width="auto"
 	>
 		<content>
-			<l:VerticalLayout
-				id="_IDGenVerticalLayout1"
-				class="sapUiContentPadding"
-			>
+			<l:VerticalLayout id="_IDGenVerticalLayout1">
 				<u:Calendar
 					id="calendar"
 					firstDayOfWeek="1"
@@ -25,8 +22,12 @@
 					intervalSelection="true"
 					weekNumberSelect="handleWeekNumberSelect"
 					width="auto"
+					legend="calendarLegend"
 					showCurrentDateButton="true"
 				/>
+				<u:CalendarLegend id="calendarLegend"/>
+			</l:VerticalLayout>
+			<l:VerticalLayout id="_IDGenVerticalLayout2" class="sapUiContentPadding">
 				<l:HorizontalLayout id="_IDGenHorizontalLayout2">
 					<Label
 						id="_IDGenLabel2"

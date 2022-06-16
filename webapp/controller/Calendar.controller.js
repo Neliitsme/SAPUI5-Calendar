@@ -1,7 +1,6 @@
 sap.ui.define(
   [
     'sap/ui/core/mvc/Controller',
-    'sap/ui/unified/DateRange',
     'sap/ui/core/format/DateFormat',
     'sap/ui/core/library',
     'sap/ui/unified/library',
@@ -13,7 +12,6 @@ sap.ui.define(
    */
   function (
     Controller,
-    DateRange,
     DateFormat,
     coreLibrary,
     unifiedLibrary,
@@ -63,67 +61,33 @@ sap.ui.define(
         }
       },
 
-      handleSelectThisWeek: function () {
-        this._selectWeekInterval(6);
-      },
-
-      handleSelectWorkWeek: function () {
-        this._selectWeekInterval(4);
-      },
-
       handleWeekNumberSelect: function (oEvent) {
-        var oDateRange = oEvent.getParameter('weekDays'),
-          iWeekNumber = oEvent.getParameter('weekNumber');
-
-        // if (iWeekNumber % 5 === 0) {
-        //   oEvent.preventDefault();
-        //   MessageToast.show(
-        //     'You are not allowed to select this calendar week!',
-        //   );
-        //   return;
-        // }
+        var oDateRange = oEvent.getParameter('weekDays');
         this._updateText(oDateRange);
-      },
-
-      _selectWeekInterval: function (iDays) {
-        var oCurrent = new Date(), // get current date
-          iWeekStart = oCurrent.getDate() - oCurrent.getDay() + 1,
-          iWeekEnd = iWeekStart + iDays, // end day is the first day + 6
-          oMonday = new Date(oCurrent.setDate(iWeekStart)),
-          oSunday = new Date(oCurrent.setDate(iWeekEnd)),
-          oCalendar = this.byId('calendar');
-
-        oCalendar.removeAllSelectedDates();
-        oCalendar.addSelectedDate(
-          new DateRange({ startDate: oMonday, endDate: oSunday }),
-        );
-
-        this._updateText(oCalendar.getSelectedDates()[0]);
       },
 
       _showSpecialDates: function () {
         // 1 - Non-working, 2 - Shortened (Any day), 3 - Working day (Weekends)
-        var _getHolidayType = (sT) => {
-          switch (sT) {
+        var configureHoliday = (oSpecialDate, sHolidayType) => {
+          switch (sHolidayType) {
             case '1':
-              return CalendarDayType.Type01;
+              oSpecialDate.setType(CalendarDayType.Type01);
+              oSpecialDate.setSecondaryType(CalendarDayType.NonWorking);
+              oSpecialDate.setColor('#FF0000');
+              break;
             case '2':
-              return CalendarDayType.Type02;
+              oSpecialDate.setType(CalendarDayType.Type02);
+              oSpecialDate.setColor('#FF8000');
+              break;
             case '3':
-              return CalendarDayType.Type03;
+              oSpecialDate.setType(CalendarDayType.Type03);
+              oSpecialDate.setColor('#FFBF00');
+              break;
             default:
               console.log('Unknown Holiday Type');
-              return CalendarDayType.None;
+              break;
           }
-        };
-
-        var _getSecondaryHolidayType = (sT) => {
-          switch (sT) {
-            case '1':
-              return CalendarDayType.NonWorking;
-            default:
-              return CalendarDayType.None;
-          }
+          return oSpecialDate;
         };
 
         var oCalendar = this.byId('calendar');
@@ -138,17 +102,23 @@ sap.ui.define(
         var oHolidays = oCalendarSpecialDates.querySelectorAll('holiday');
         var oDays = oCalendarSpecialDates.querySelectorAll('day');
 
-        for (const element of oDays) {
-          var dHoliday = new Date(element.getAttribute('d'));
+        for (const oDayElement of oDays) {
+          var dHoliday = new Date(oDayElement.getAttribute('d'));
           dHoliday.setFullYear(sYear);
-          var sHolidayType = element.getAttribute('t');
+          var sHolidayType = oDayElement.getAttribute('t');
+          var sHolidayId = oDayElement.getAttribute('h');
+          var sHolidayTitle = null;
+          if (sHolidayId) {
+            sHolidayTitle =
+              oHolidays[parseInt(sHolidayId) - 1].getAttribute('title');
+          }
+          var oSpecialDate = new DateTypeRange({
+            startDate: dHoliday,
+            tooltip: sHolidayTitle,
+          });
 
           oCalendar.addSpecialDate(
-            new DateTypeRange({
-              startDate: dHoliday,
-              type: _getHolidayType(sHolidayType),
-              secondaryType: _getSecondaryHolidayType(sHolidayType),
-            }),
+            configureHoliday(oSpecialDate, sHolidayType),
           );
         }
 
@@ -156,18 +126,21 @@ sap.ui.define(
           new CalendarLegendItem({
             text: 'Holiday',
             type: CalendarDayType.Type01,
+            color: '#FF0000',
           }),
         );
         oLegend.addItem(
           new CalendarLegendItem({
             text: 'Shortened Work Day',
             type: CalendarDayType.Type02,
+            color: '#FF8000',
           }),
         );
         oLegend.addItem(
           new CalendarLegendItem({
             text: 'Weekend Work Day',
             type: CalendarDayType.Type03,
+            color: '#FFBF00',
           }),
         );
       },

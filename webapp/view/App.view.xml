@@ -25,14 +25,14 @@
 					title="{i18n>homePageTitle}"
 				>
 					<headerContent>
-						<Switch id="themeSwitch"
+						<Switch
+							id="themeSwitch"
 							customTextOff="️🌑"
 							customTextOn="☀️"
 							state="true"
 							tooltip="Theme switch"
 							change="handleThemeSwitch"
-						>
-						</Switch>
+						/>
 					</headerContent>
 					<content>
 						<mvc:XMLView

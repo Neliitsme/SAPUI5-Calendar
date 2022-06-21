@@ -6,6 +6,7 @@ sap.ui.define(
     'sap/ui/unified/library',
     'sap/ui/unified/DateTypeRange',
     'sap/ui/unified/CalendarLegendItem',
+    'sap/ui/model/json/JSONModel',
   ],
   /**
    * @param {typeof sap.ui.core.mvc.Controller} Controller
@@ -17,10 +18,13 @@ sap.ui.define(
     unifiedLibrary,
     DateTypeRange,
     CalendarLegendItem,
+    JSONModel,
   ) {
     'use strict';
     var CalendarType = coreLibrary.CalendarType;
     var CalendarDayType = unifiedLibrary.CalendarDayType;
+    var oVacationDateRange = null;
+    var jVacationDateRange = null;
 
     return Controller.extend('sapui5calendar.controller.Calendar', {
       oFormatYyyymmdd: null,
@@ -30,11 +34,48 @@ sap.ui.define(
           calendarType: CalendarType.Gregorian,
         });
         this._showSpecialDates();
+
+        oVacationDateRange = {
+          vacationDateRange: {
+            startDate: null,
+            endDate: null,
+            totalDays: null,
+            totalWorkDays: null,
+          },
+        };
+        jVacationDateRange = new JSONModel(oVacationDateRange);
+        this.getOwnerComponent().setModel(jVacationDateRange);
       },
 
       handleCalendarSelect: function (oEvent) {
         var oCalendar = oEvent.getSource();
+        // console.log(oCalendar.getSpecialDates());
+        //TODO: Generate dates in between and check if any of them is special with oCalendar.getSpecialDates()
         this._updateText(oCalendar.getSelectedDates()[0]);
+        this._updateDateRangeModel(oCalendar.getSelectedDates()[0]);
+      },
+
+      _updateDateRangeModel: function (oSelectedDates) {
+        var dStartDate = oSelectedDates.getStartDate();
+        var dEndDate = oSelectedDates.getEndDate();
+        if (!dEndDate) {
+          oVacationDateRange.vacationDateRange.startDate = null;
+          oVacationDateRange.vacationDateRange.endDate = null;
+          oVacationDateRange.vacationDateRange.totalDays = null;
+          oVacationDateRange.vacationDateRange.totalWorkDays = null;
+          jVacationDateRange.refresh();
+          return;
+        }
+        var dDiff = Math.ceil(
+          (dEndDate - dStartDate) / (1000 * 60 * 60 * 24) + 1,
+        );
+        oVacationDateRange.vacationDateRange.startDate =
+          this.oFormatYyyymmdd.format(dStartDate);
+        oVacationDateRange.vacationDateRange.endDate =
+          this.oFormatYyyymmdd.format(dEndDate);
+        oVacationDateRange.vacationDateRange.totalDays = dDiff;
+        oVacationDateRange.vacationDateRange.totalWorkDays = 0;
+        jVacationDateRange.refresh();
       },
 
       _updateText: function (oSelectedDates) {

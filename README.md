@@ -17,4 +17,14 @@ In order to launch the app, simply run the following from the app root folder:
     npm start
 ```
 
-Running the start command will open the SAP Fiori Launchpad view of the app. In order to see the "standalone" view, head to `/index.html`.
+Running the start command will open the SAP Fiori Launchpad view of the app. In order to see the "standalone" view, head to `/index.html` or run:
+
+```shell
+    npm run start-noflp
+```
+
+To see all launch options, run the following command or check out `package.json`.
+
+```shell
+    npm run
+```

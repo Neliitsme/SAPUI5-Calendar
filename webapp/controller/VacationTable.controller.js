@@ -28,14 +28,14 @@ sap.ui.define(
       },
 
       _refreshLongVacationState: function () {
-        //TODO: Replace totalDays with totalWorkDays or re-read the docs to be sure
         bIsLongVacationUsed = _oVacationsModel.vacations.some(
-          (el) => el.totalDays >= 14,
+          (el) => el.totalDaysNoHolidays >= 14,
         );
       },
 
       //TODO: add a proper dialog window or a snackbar
-      handleAddHoliday: function () {
+      //TODO: check overlapping vacations
+      handleAddVacation: function () {
         if (_oVacationsModel.vacations.length === 4) {
           alert('Total amount of vacations cannot exceed 4');
           return;
@@ -44,9 +44,14 @@ sap.ui.define(
         var oVacationDateRange = {
           ...this.getView().getModel().getProperty('/vacationDateRange'),
         };
-        //TODO: Replace totalDays with totalWorkDays or re-read the docs to be sure
+
+        if (oVacationDateRange.endDate === null) {
+          alert('Please select an end date');
+          return;
+        }
+
         if (
-          oVacationDateRange.totalDays < 14 &&
+          oVacationDateRange.totalDaysNoHolidays < 14 &&
           _oVacationsModel.vacations.length === 3 &&
           !bIsLongVacationUsed
         ) {
@@ -61,7 +66,7 @@ sap.ui.define(
         jVacationsModel.refresh();
       },
 
-      handleDeleteHoliday: function (oArg) {
+      handleDeleteVacation: function (oArg) {
         var oHolidayRow = oArg.getSource().getBindingContext().getObject();
         for (let i = 0; i < _oVacationsModel.vacations.length; i++) {
           if (_oVacationsModel.vacations[i] == oHolidayRow) {

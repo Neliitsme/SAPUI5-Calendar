@@ -22,7 +22,7 @@
 				id="_IDGenButton1"
 				icon="sap-icon://create-leave-request"
 				text="Add holiday"
-				press="handleAddHoliday"  
+				press="handleAddVacation"
 			/>
 		</Toolbar>
 		<content>
@@ -67,41 +67,28 @@
 						vAlign="Middle"
 					>
 						<cells>
-							<Text id="_IDGenText5" text="{startDate}"/>
-							<Text id="_IDGenText6" text="{endDate}"/>
-							<Text id="_IDGenText7" text="{totalDays}"/>
-							<Text id="_IDGenText8" text="{totalWorkDays}"/>
-							<Button id="_IDGenButton2"
-								icon="sap-icon://delete"
-								type="Reject"
-								press="handleDeleteHoliday"
-							/>
-							<!-- <ObjectIdentifier
-								id="_IDGenObjectIdentifier1"
-								title="{Name}"
-								text="{ProductId}"
+							<Text
+								id="_IDGenText5"
+								text="{startDate}"
 							/>
 							<Text
 								id="_IDGenText6"
-								text="{SupplierName}"
+								text="{endDate}"
 							/>
 							<Text
 								id="_IDGenText7"
-								text="{Width} x {Depth} x {Height} {DimUnit}"
+								text="{totalDays}"
 							/>
-							<ObjectNumber
-								id="_IDGenObjectNumber1"
-								number="{WeightMeasure}"
-								unit="{WeightUnit}"
-								state="{
-									parts: [{
-										path: 'WeightMeasure'
-									}, {
-										path: 'WeightUnit'
-									}],
-									formatter: 'sap.m.sample.Table.Formatter.weightState'
-								}"
-							/> -->
+							<Text
+								id="_IDGenText8"
+								text="{totalWorkDays}"
+							/>
+							<Button
+								id="_IDGenButton2"
+								icon="sap-icon://delete"
+								type="Reject"
+								press="handleDeleteVacation"
+							/>
 						</cells>
 					</ColumnListItem>
 				</items>

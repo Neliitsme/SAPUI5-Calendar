@@ -25,6 +25,7 @@ sap.ui.define(
     var CalendarDayType = unifiedLibrary.CalendarDayType;
     var oVacationDateRange = null;
     var jVacationDateRange = null;
+    var oSpecialDates = null;
 
     return Controller.extend('sapui5calendar.controller.Calendar', {
       oFormatYyyymmdd: null,
@@ -41,6 +42,7 @@ sap.ui.define(
             endDate: null,
             totalDays: null,
             totalWorkDays: null,
+            totalDaysNoHolidays: null,
           },
         };
         jVacationDateRange = new JSONModel(oVacationDateRange);
@@ -49,8 +51,6 @@ sap.ui.define(
 
       handleCalendarSelect: function (oEvent) {
         var oCalendar = oEvent.getSource();
-        // console.log(oCalendar.getSpecialDates());
-        //TODO: Generate dates in between and check if any of them is special with oCalendar.getSpecialDates()
         this._updateText(oCalendar.getSelectedDates()[0]);
         this._updateDateRangeModel(oCalendar.getSelectedDates()[0]);
       },
@@ -63,18 +63,46 @@ sap.ui.define(
           oVacationDateRange.vacationDateRange.endDate = null;
           oVacationDateRange.vacationDateRange.totalDays = null;
           oVacationDateRange.vacationDateRange.totalWorkDays = null;
+          oVacationDateRange.vacationDateRange.totalDaysNoHolidays = null;
           jVacationDateRange.refresh();
           return;
         }
-        var dDiff = Math.ceil(
+
+        var iTotalDays = Math.ceil(
           (dEndDate - dStartDate) / (1000 * 60 * 60 * 24) + 1,
         );
         oVacationDateRange.vacationDateRange.startDate =
           this.oFormatYyyymmdd.format(dStartDate);
         oVacationDateRange.vacationDateRange.endDate =
           this.oFormatYyyymmdd.format(dEndDate);
-        oVacationDateRange.vacationDateRange.totalDays = dDiff;
-        oVacationDateRange.vacationDateRange.totalWorkDays = 0;
+        oVacationDateRange.vacationDateRange.totalDays = iTotalDays;
+
+        var aDates = [];
+        var dCurrentDate = new Date(dStartDate);
+        while (dCurrentDate <= dEndDate) {
+          aDates.push(new Date(dCurrentDate));
+          dCurrentDate.setDate(dCurrentDate.getDate() + 1);
+        }
+
+        var iTotalWorkDays = iTotalDays;
+        var iTotalDaysNoHolidays = iTotalDays;
+        //TODO: Check for shortened days as they are not holidays
+        for (const dDate of aDates) {
+          var bIsSpecial = oSpecialDates.some(
+            (el) => el.getStartDate().getTime() === dDate.getTime(),
+          );
+
+          if (bIsSpecial) {
+            iTotalDaysNoHolidays--;
+          }
+
+          if (bIsSpecial || dDate.getDay() === 6 || dDate.getDay() === 0) {
+            iTotalWorkDays--;
+          }
+        }
+        oVacationDateRange.vacationDateRange.totalWorkDays = iTotalWorkDays;
+        oVacationDateRange.vacationDateRange.totalDaysNoHolidays =
+          iTotalDaysNoHolidays;
         jVacationDateRange.refresh();
       },
 
@@ -105,6 +133,7 @@ sap.ui.define(
       handleWeekNumberSelect: function (oEvent) {
         var oDateRange = oEvent.getParameter('weekDays');
         this._updateText(oDateRange);
+        this._updateDateRangeModel(oDateRange);
       },
 
       _showSpecialDates: function () {
@@ -162,6 +191,8 @@ sap.ui.define(
             configureHoliday(oSpecialDate, sHolidayType),
           );
         }
+
+        oSpecialDates = oCalendar.getSpecialDates();
 
         oLegend.addItem(
           new CalendarLegendItem({

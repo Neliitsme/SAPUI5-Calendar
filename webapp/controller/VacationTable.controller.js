@@ -5,8 +5,9 @@ sap.ui.define(
     'sap/m/ColumnListItem',
     'sap/ui/model/json/JSONModel',
     'sap/ui/model/Sorter',
+    'sap/m/MessageBox',
   ],
-  function (Controller, Table, ColumnListItem, JSONModel, Sorter) {
+  function (Controller, Table, ColumnListItem, JSONModel, Sorter, MessageBox) {
     'use strict';
 
     var _oVacationTable = null;
@@ -43,11 +44,9 @@ sap.ui.define(
         );
       },
 
-      //TODO: add a proper dialog window or a snackbar
-      //TODO: check overlapping vacations
       handleAddVacation: function () {
         if (_oVacationsModel.vacations.length === 4) {
-          alert('Total amount of vacations cannot exceed 4');
+          MessageBox.alert('Total amount of vacations cannot exceed 4');
           return;
         }
 
@@ -56,7 +55,7 @@ sap.ui.define(
         };
 
         if (oVacationDateRange.endDate === null) {
-          alert('Please select an end date');
+          MessageBox.alert('Please select an end date');
           return;
         }
 
@@ -65,7 +64,7 @@ sap.ui.define(
           _oVacationsModel.vacations.length === 3 &&
           !bIsLongVacationUsed
         ) {
-          alert(
+          MessageBox.alert(
             'You must have at least one vacation that is 14 days or longer',
           );
           return;
@@ -76,8 +75,22 @@ sap.ui.define(
             oVacationDateRange.totalDaysNoHolidays >
           _oVacationDayInfoModel.maxVacationDays
         ) {
-          alert('Total amount of vacation days cannot exceed 28');
+          MessageBox.alert('Total amount of vacation days cannot exceed 28');
           return;
+        }
+
+        if (_oVacationsModel.vacations.length) {
+          var bIsOverlapping = _oVacationsModel.vacations.some(
+            (el) =>
+              new Date(oVacationDateRange.startDate).getTime() <=
+                new Date(el.endDate).getTime() &&
+              new Date(oVacationDateRange.endDate).getTime() >=
+                new Date(el.startDate).getTime(),
+          );
+          if (bIsOverlapping) {
+            MessageBox.alert('Vacation overlaps with another vacation');
+            return;
+          }
         }
 
         _oVacationDayInfoModel.currentVacationDays +=

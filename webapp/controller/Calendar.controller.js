@@ -40,9 +40,9 @@ sap.ui.define(
           vacationDateRange: {
             startDate: null,
             endDate: null,
-            totalDays: null,
-            totalWorkDays: null,
-            totalDaysNoHolidays: null,
+            totalDays: 0,
+            totalWorkDays: 0,
+            totalDaysNoHolidays: 0,
           },
         };
         jVacationDateRange = new JSONModel(oVacationDateRange);
@@ -86,17 +86,33 @@ sap.ui.define(
 
         var iTotalWorkDays = iTotalDays;
         var iTotalDaysNoHolidays = iTotalDays;
-        //TODO: Check for shortened days as they are not holidays
         for (const dDate of aDates) {
-          var bIsSpecial = oSpecialDates.some(
-            (el) => el.getStartDate().getTime() === dDate.getTime(),
-          );
-
-          if (bIsSpecial) {
-            iTotalDaysNoHolidays--;
+          var bIsHoliday = false;
+          var bIsWeekendWorkDay = false;
+          for (const oSpecialDate of oSpecialDates) {
+            if (oSpecialDate.getStartDate().getTime() === dDate.getTime()) {
+              if (
+                oSpecialDate.getSecondaryType() === CalendarDayType.NonWorking
+              ) {
+                bIsHoliday = true;
+                break;
+              } else if (
+                oSpecialDate.getType() === CalendarDayType.Type03 ||
+                (oSpecialDate.getType() === CalendarDayType.Type02 &&
+                  dDate.getDay() % 6 === 0)
+              ) {
+                // Type03 is guaranteed to be weekend work day
+                // Type02 could be assigned to any day, so you have to check if it is weekend
+                bIsWeekendWorkDay = true;
+                break;
+              }
+            }
           }
 
-          if (bIsSpecial || dDate.getDay() === 6 || dDate.getDay() === 0) {
+          if (bIsHoliday) {
+            iTotalDaysNoHolidays--;
+          }
+          if (bIsHoliday || (dDate.getDay() % 6 === 0 && !bIsWeekendWorkDay)) {
             iTotalWorkDays--;
           }
         }

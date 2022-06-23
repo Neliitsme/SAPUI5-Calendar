@@ -17,6 +17,10 @@
 				text="{i18n>vacationTableName}"
 				level="H2"
 			/>
+			<Text
+				id="vacationDaysInfo"
+				text="{i18n>vacationUsedDays} {/currentVacationDays} {i18n>vacationOutOf} {/maxVacationDays}"
+			/>
 			<ToolbarSpacer id="_IDGenToolbarSpacer1"/>
 			<Button
 				id="_IDGenButton1"

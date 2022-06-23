@@ -4,15 +4,17 @@ sap.ui.define(
     'sap/m/Table',
     'sap/m/ColumnListItem',
     'sap/ui/model/json/JSONModel',
+    'sap/ui/model/Sorter',
   ],
-  function (Controller, Table, ColumnListItem, JSONModel) {
+  function (Controller, Table, ColumnListItem, JSONModel, Sorter) {
     'use strict';
 
-    var bIsLongVacationUsed = false;
     var _oVacationTable = null;
+    var bIsLongVacationUsed = false;
     var _oVacationsModel = null;
     var jVacationsModel = null;
-    var iMaxVacationDays = 28;
+    var _oVacationDayInfoModel = null;
+    var jVacationDaysInfo = null;
 
     return Controller.extend('sapui5calendar.controller.VacationTable', {
       /**
@@ -20,11 +22,19 @@ sap.ui.define(
        */
       onInit: function () {
         _oVacationTable = this.byId('VacationTable');
+        var oVacationDaysInfo = this.byId('vacationDaysInfo');
         _oVacationsModel = {
           vacations: [],
         };
         jVacationsModel = new JSONModel(_oVacationsModel);
         _oVacationTable.setModel(jVacationsModel);
+
+        _oVacationDayInfoModel = {
+          currentVacationDays: 0,
+          maxVacationDays: 28,
+        };
+        jVacationDaysInfo = new JSONModel(_oVacationDayInfoModel);
+        oVacationDaysInfo.setModel(jVacationDaysInfo);
       },
 
       _refreshLongVacationState: function () {
@@ -60,22 +70,46 @@ sap.ui.define(
           );
           return;
         }
-        // TODO: Add check for iMaxVacationHolidays
+
+        if (
+          _oVacationDayInfoModel.currentVacationDays +
+            oVacationDateRange.totalDaysNoHolidays >
+          _oVacationDayInfoModel.maxVacationDays
+        ) {
+          alert('Total amount of vacation days cannot exceed 28');
+          return;
+        }
+
+        _oVacationDayInfoModel.currentVacationDays +=
+          oVacationDateRange.totalDaysNoHolidays;
         _oVacationsModel.vacations.push(oVacationDateRange);
         this._refreshLongVacationState();
         jVacationsModel.refresh();
+        jVacationDaysInfo.refresh();
+        this._sortByStartDate();
       },
 
       handleDeleteVacation: function (oArg) {
         var oHolidayRow = oArg.getSource().getBindingContext().getObject();
         for (let i = 0; i < _oVacationsModel.vacations.length; i++) {
           if (_oVacationsModel.vacations[i] == oHolidayRow) {
-            _oVacationsModel.vacations.splice(i, 1);
+            var deletedRow = _oVacationsModel.vacations.splice(i, 1);
+            _oVacationDayInfoModel.currentVacationDays -=
+              deletedRow[0].totalDaysNoHolidays;
             jVacationsModel.refresh();
+            jVacationDaysInfo.refresh();
             this._refreshLongVacationState();
             break;
           }
         }
+      },
+      _sortByStartDate: function () {
+        var oBinding = _oVacationTable.getBinding('items');
+        var oSorters = [];
+        var sPath = 'startDate';
+        var bDescending = false;
+        oSorters.push(new Sorter(sPath, bDescending));
+        oBinding.sort(oSorters);
       },
     });
   },

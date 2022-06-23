@@ -33,7 +33,7 @@
 			>
 				<Title
 					id="_IDGenTitle1"
-					text="Current selection"
+					text="{i18n>calendarCurrentSelection}"
 				/>
 				<l:HorizontalLayout id="_IDGenHorizontalLayout2">
 					<Label

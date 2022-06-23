@@ -36,6 +36,10 @@
 					</headerContent>
 					<content>
 						<mvc:XMLView
+							id="_IDGenXMLView2"
+							viewName="sapui5calendar.view.VacationTable"
+						/>
+						<mvc:XMLView
 							id="_IDGenXMLView1"
 							viewName="sapui5calendar.view.Calendar"
 						/>

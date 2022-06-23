@@ -27,7 +27,14 @@
 				/>
 				<u:CalendarLegend id="calendarLegend"/>
 			</l:VerticalLayout>
-			<l:VerticalLayout id="_IDGenVerticalLayout2" class="sapUiContentPadding">
+			<l:VerticalLayout
+				id="_IDGenVerticalLayout2"
+				class="sapUiContentPadding"
+			>
+				<Title
+					id="_IDGenTitle1"
+					text="{i18n>calendarCurrentSelection}"
+				/>
 				<l:HorizontalLayout id="_IDGenHorizontalLayout2">
 					<Label
 						id="_IDGenLabel2"
@@ -49,6 +56,42 @@
 					<Text
 						id="selectedDateTo"
 						text="No Date Selected"
+						class="labelMarginLeft"
+					/>
+				</l:HorizontalLayout>
+				<l:HorizontalLayout id="_IDGenHorizontalLayout4">
+					<Label
+						id="_IDGenLabel4"
+						text="Total days:"
+						class="labelMarginLeft"
+					/>
+					<Text
+						id="totalDays"
+						text="{/vacationDateRange/totalDays}"
+						class="labelMarginLeft"
+					/>
+				</l:HorizontalLayout>
+				<l:HorizontalLayout id="_IDGenHorizontalLayout6">
+					<Label
+						id="_IDGenLabel6"
+						text="Total days without holidays:"
+						class="labelMarginLeft"
+					/>
+					<Text
+						id="totalDaysNoHolidays"
+						text="{/vacationDateRange/totalDaysNoHolidays}"
+						class="labelMarginLeft"
+					/>
+				</l:HorizontalLayout>
+				<l:HorizontalLayout id="_IDGenHorizontalLayout5">
+					<Label
+						id="_IDGenLabel5"
+						text="Total Work Days:"
+						class="labelMarginLeft"
+					/>
+					<Text
+						id="totalWorkDays"
+						text="{/vacationDateRange/totalWorkDays}"
 						class="labelMarginLeft"
 					/>
 				</l:HorizontalLayout>

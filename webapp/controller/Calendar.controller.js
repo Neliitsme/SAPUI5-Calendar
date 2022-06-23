@@ -26,6 +26,7 @@ sap.ui.define(
     var oVacationDateRange = null;
     var jVacationDateRange = null;
     var oSpecialDates = null;
+    var oResourceBundle = null;
 
     return Controller.extend('sapui5calendar.controller.Calendar', {
       oFormatYyyymmdd: null,
@@ -34,6 +35,10 @@ sap.ui.define(
           pattern: 'yyyy-MM-dd',
           calendarType: CalendarType.Gregorian,
         });
+        oResourceBundle = this.getOwnerComponent()
+          .getModel('i18n')
+          .getResourceBundle();
+
         this._showSpecialDates();
 
         oVacationDateRange = {
@@ -132,17 +137,25 @@ sap.ui.define(
           if (oDate) {
             oSelectedDateFrom.setText(this.oFormatYyyymmdd.format(oDate));
           } else {
-            oSelectedDateTo.setText('No Date Selected');
+            oSelectedDateTo.setText(
+              oResourceBundle.getText('calendarNoDateSelected'),
+            );
           }
           oDate = oSelectedDates.getEndDate();
           if (oDate) {
             oSelectedDateTo.setText(this.oFormatYyyymmdd.format(oDate));
           } else {
-            oSelectedDateTo.setText('No Date Selected');
+            oSelectedDateTo.setText(
+              oResourceBundle.getText('calendarNoDateSelected'),
+            );
           }
         } else {
-          oSelectedDateFrom.setText('No Date Selected');
-          oSelectedDateTo.setText('No Date Selected');
+          oSelectedDateFrom.setText(
+            oResourceBundle.getText('calendarNoDateSelected'),
+          );
+          oSelectedDateTo.setText(
+            oResourceBundle.getText('calendarNoDateSelected'),
+          );
         }
       },
 
@@ -212,21 +225,21 @@ sap.ui.define(
 
         oLegend.addItem(
           new CalendarLegendItem({
-            text: 'Holiday',
+            text: oResourceBundle.getText('calendarHoliday'),
             type: CalendarDayType.Type01,
             color: '#FF0000',
           }),
         );
         oLegend.addItem(
           new CalendarLegendItem({
-            text: 'Shortened Work Day',
+            text: oResourceBundle.getText('calendarShortenedWorkDay'),
             type: CalendarDayType.Type02,
             color: '#FF8000',
           }),
         );
         oLegend.addItem(
           new CalendarLegendItem({
-            text: 'Weekend Work Day',
+            text: oResourceBundle.getText('calendarWeekendWorkDay'),
             type: CalendarDayType.Type03,
             color: '#FFBF00',
           }),

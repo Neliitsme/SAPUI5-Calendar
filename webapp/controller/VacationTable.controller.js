@@ -16,6 +16,7 @@ sap.ui.define(
     var jVacationsModel = null;
     var _oVacationDayInfoModel = null;
     var jVacationDaysInfo = null;
+    var oResourceBundle = null;
 
     return Controller.extend('sapui5calendar.controller.VacationTable', {
       /**
@@ -36,6 +37,9 @@ sap.ui.define(
         };
         jVacationDaysInfo = new JSONModel(_oVacationDayInfoModel);
         oVacationDaysInfo.setModel(jVacationDaysInfo);
+        oResourceBundle = this.getOwnerComponent()
+          .getModel('i18n')
+          .getResourceBundle();
       },
 
       _refreshLongVacationState: function () {
@@ -46,7 +50,9 @@ sap.ui.define(
 
       handleAddVacation: function () {
         if (_oVacationsModel.vacations.length === 4) {
-          MessageBox.alert('Total amount of vacations cannot exceed 4');
+          MessageBox.alert(
+            oResourceBundle.getText('vacationExceedsNumLimitAlert'),
+          );
           return;
         }
 
@@ -55,7 +61,7 @@ sap.ui.define(
         };
 
         if (oVacationDateRange.endDate === null) {
-          MessageBox.alert('Please select an end date');
+          MessageBox.alert(oResourceBundle.getText('vacationNoEndDateAlert'));
           return;
         }
 
@@ -64,9 +70,7 @@ sap.ui.define(
           _oVacationsModel.vacations.length === 3 &&
           !bIsLongVacationUsed
         ) {
-          MessageBox.alert(
-            'You must have at least one vacation that is 14 days or longer',
-          );
+          MessageBox.alert(oResourceBundle.getText('vacationNoLongAlert'));
           return;
         }
 
@@ -75,7 +79,9 @@ sap.ui.define(
             oVacationDateRange.totalDaysNoHolidays >
           _oVacationDayInfoModel.maxVacationDays
         ) {
-          MessageBox.alert('Total amount of vacation days cannot exceed 28');
+          MessageBox.alert(
+            oResourceBundle.getText('vacationExceedsDaysLimitAlert'),
+          );
           return;
         }
 
@@ -88,7 +94,9 @@ sap.ui.define(
                 new Date(el.startDate).getTime(),
           );
           if (bIsOverlapping) {
-            MessageBox.alert('Vacation overlaps with another vacation');
+            MessageBox.alert(
+              oResourceBundle.getText('vacationOverlapAlert'),
+            );
             return;
           }
         }

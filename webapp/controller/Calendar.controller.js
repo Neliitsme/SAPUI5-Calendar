@@ -39,6 +39,10 @@ sap.ui.define(
           .getModel('i18n')
           .getResourceBundle();
 
+        this.byId('calendar').displayDate(
+          new Date(new Date().getFullYear().toString()),
+        );
+
         this._showSpecialDates();
 
         oVacationDateRange = {

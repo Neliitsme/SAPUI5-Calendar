@@ -19,7 +19,14 @@
 			/>
 			<Text
 				id="vacationDaysInfo"
-				text="{i18n>vacationUsedDays} {/currentVacationDays} {i18n>vacationOutOf} {/maxVacationDays}"
+				text="{
+					parts: [
+					{path: 'i18n>vacationUsedDays'},
+					{path: '/currentVacationDays'},
+					{path: '/maxVacationDays'}
+					],
+					formatter: 'jQuery.sap.formatMessage'
+				}"
 			/>
 			<ToolbarSpacer id="_IDGenToolbarSpacer1"/>
 			<Button
